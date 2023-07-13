@@ -6,7 +6,7 @@ services:
     #  dockerfile: Dockerfile
     image: ghcr.io/parzival-space/stable-diffusion:latest
     volumes:
-      - ./test-data:/data:rw
+      - ./data:/data:rw
     ports:
       - "7680:7680/tcp"
     deploy:

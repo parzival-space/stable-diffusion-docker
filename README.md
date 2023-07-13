@@ -16,7 +16,7 @@ To start the container, execute the following command:
 docker run \
   -v ./data:/data:rw \
   -p 7680:7680/tcp \
-  --gpu all \
+  --gpus all \
   ghcr.io/parzival-space/stable-diffusion:latest
 ```
 Alternatively, you can use the provided ``docker-compose.yml`` file if you prefer.
