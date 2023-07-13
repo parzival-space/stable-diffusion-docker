@@ -17,6 +17,7 @@ RUN apt update && \
         ffmpeg \
         libsm6 \
         libxext6 \
+        sudo \
         curl
 
 # setup data dirs
@@ -32,6 +33,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 # create stable diffusion user
 RUN useradd -mp $(openssl passwd -1 SuperSecurePassword) -G sudo stable_diffusion && \
+    echo "stable_diffusion ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/stable_diffusion && \
     chown stable_diffusion:stable_diffusion -R /data
 WORKDIR /home/stable_diffusion
 USER stable_diffusion

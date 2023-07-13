@@ -3,6 +3,9 @@ dataDir=/data
 webuiDir=/home/stable_diffusion/webui
 set -e
 
+# fix permissions (because docker mounts suck)
+sudo chown "$(whoami):$(whoami)" -R $dataDir
+
 # create models dir
 if [ ! -d $dataDir/models ]; then
   mkdir -p $dataDir/models
