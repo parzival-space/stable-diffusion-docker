@@ -20,10 +20,6 @@ RUN apt update && \
         sudo \
         curl
 
-# setup data dirs
-RUN mkdir -p /data && \
-    chmod -R 777 /data
-
 # setup python
 RUN pip install --upgrade pip
 ENV PYTHONUNBUFFERED=1 \
@@ -33,19 +29,22 @@ ENV PYTHONUNBUFFERED=1 \
 
 # create stable diffusion user
 RUN useradd -mp $(openssl passwd -1 SuperSecurePassword) -G sudo stable_diffusion && \
-    echo "stable_diffusion ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/stable_diffusion && \
-    chown stable_diffusion:stable_diffusion -R /data
-WORKDIR /home/stable_diffusion
-USER stable_diffusion
+    echo "stable_diffusion ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/stable_diffusion
+
+# prepare entrypoint script
+COPY entrypoint.sh /home/stable_diffusion/entrypoint.sh
+RUN mkdir -p /data && \
+    chown stable_diffusion:stable_diffusion -R /data && \
+    chown stable_diffusion:stable_diffusion -R /home/stable_diffusion
 
 # setup stable diffusion web
+WORKDIR /home/stable_diffusion
+USER stable_diffusion
 RUN git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git ./webui && \
     mv ./webui/models ./webui/models-default && \
     mv ./webui/configs ./webui/configs-default && \
     mv ./webui/embeddings ./webui/embeddings-default
 
-COPY entrypoint.sh /home/stable_diffusion/entrypoint.sh
 WORKDIR /home/stable_diffusion/webui
 EXPOSE 7680/tcp
-#CMD ["/bin/bash"]
 CMD ["/bin/bash", "/home/stable_diffusion/entrypoint.sh"]

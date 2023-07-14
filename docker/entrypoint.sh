@@ -1,60 +1,44 @@
 #!/bin/bash
+set -e
+
 dataDir=/data
 webuiDir=/home/stable_diffusion/webui
-set -e
+subDirs=("configs" "embeddings" "models" "outputs" "repositories" "venv")
 
 # fix permissions (because docker mounts suck)
 sudo chown "$(whoami):$(whoami)" -R $dataDir
 
-# create models dir
-if [ ! -d $dataDir/models ]; then
-  mkdir -p $dataDir/models
-fi
-if [ -n "$(find $dataDir/models -prune -empty)" ]; then
-  cp -r $webuiDir/models-default/* $dataDir/models
-fi
+# prepare sub dirs
+for subDir in "${subDirs[@]}"
+do
+  echo "Preparing $dataDir/$subDir..."
 
-# create configs dir
-if [ ! -d $dataDir/configs ]; then
-  mkdir -p $dataDir/configs
-fi
-if [ -n "$(find $dataDir/configs -prune -empty)" ]; then
-  cp -r $webuiDir/configs-default/* $dataDir/configs
-fi
+  # create dir if not existing
+  if [ ! -d "$dataDir/$subDir" ]; then
+    echo " - Creating directory..."
+    mkdir "$dataDir/$subDir"
+  fi
 
-# create embeddings dir
-if [ ! -d $dataDir/embeddings ]; then
-  mkdir -p $dataDir/embeddings
-fi
-if [ -n "$(find $dataDir/embeddings -prune -empty)" ]; then
-  cp -r $webuiDir/embeddings-default/* $dataDir/embeddings
-fi
+  # link to data dir
+  echo " - Updating symlink..."
+  rm -rf $webuiDir/$subDir
+  ln -s $dataDir/$subDir $webuiDir/$subDir
 
-# create venv dir
-if [ ! -d $dataDir/venv ]; then
-  mkdir -p $dataDir/venv
-fi
-if [ -n "$(find $dataDir/venv -prune -empty)" ]; then
-  python3 -m venv $dataDir/venv
-fi
+  # prepare dir if empty
+  if [ "$(ls -A $dataDir/$subDir)" = "" ]; then
+    # copy default files if possible
+    if [ -d $webuiDir/$subDir-default ]; then
+      echo " - Copy default files..."
+      cp -R $webuiDir/$subDir-default/* $dataDir/$subDir/
+    fi
 
-# create repositories dir
-if [ ! -d $dataDir/repositories ]; then
-  mkdir -p $dataDir/repositories
-fi
-
-# create output dir
-if [ ! -d $dataDir/outputs ]; then
-  mkdir -p $dataDir/outputs
-fi
-
-# remove original models dir and link new one
-ln -s $dataDir/models $webuiDir/models
-ln -s $dataDir/outputs $webuiDir/outputs
-ln -s $dataDir/configs $webuiDir/configs
-ln -s $dataDir/embeddings $webuiDir/embeddings
-ln -s $dataDir/repositories $webuiDir/repositories
-ln -s $dataDir/venv $webuiDir/venv
+    # initialize python venv
+    if [ "$subDir" = "venv" ]; then
+      echo " - Setup Python VENV..."
+      python3 -m venv $dataDir/$subDir
+    fi
+  fi
+done
 
 # start webui
 $webuiDir/webui.sh \
