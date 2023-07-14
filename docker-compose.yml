@@ -1,18 +1,26 @@
 version: '3.3'
 services:
   stable-diffusion:
-    #build:
-    #  context: ./docker
-    #  dockerfile: Dockerfile
+#    build:
+#      context: ./docker
+#      dockerfile: Dockerfile
     image: ghcr.io/parzival-space/stable-diffusion:latest
     volumes:
-      - ./data:/data:rw
+      - ./data/configs:/data/configs
+      - ./data/embeddings:/data/embeddings
+      - ./data/models:/data/models
+      - ./data/outputs:/data/outputs
+      - sd_repositories:/data/repositories # diffuser repositories
+      - sd_venv:/data/venv # python venv
     ports:
-      - "7680:7680/tcp"
+      - "0.0.0.0:7680:7680"
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
               count: 1
-              capabilities: [gpu]
+              capabilities: [ gpu ]
+volumes:
+  sd_venv:
+  sd_repositories:
