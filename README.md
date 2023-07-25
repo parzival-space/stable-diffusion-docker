@@ -10,9 +10,9 @@ To use this container, follow these simple steps:
 Make sure you have Docker installed and configured on your system.
 Also you need a Nvidia graphics card. This container only works with an Nvidia Card.
 
-It is possible to run this in WSL 2. Docker is still required. 
-You can find instructions on how to install the CUDA drivers here:
-[https://developer.nvidia.com/cuda-downloads](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_network)
+1. Make sure Docker is installed. 
+2. Install the CUDA drivers, you can find instructions on how to do that here: [https://developer.nvidia.com/cuda-downloads](https://developer.nvidia.com/cuda-downloads)
+3. Install the Nvidia Container Toolkit: [https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#docker)
 
 ### Starting the Container
 To start the container, execute the following command:
