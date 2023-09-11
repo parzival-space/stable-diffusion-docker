@@ -3,7 +3,7 @@ set -e
 
 dataDir=/data
 webuiDir=/home/stable_diffusion/webui
-subDirs=("configs" "embeddings" "models" "outputs" "repositories" "venv")
+subDirs=("configs" "embeddings" "models" "outputs" "repositories" "venv" "extensions")
 
 # fix permissions (because docker mounts suck)
 sudo chown "$(whoami):$(whoami)" -R $dataDir
@@ -44,4 +44,5 @@ done
 $webuiDir/webui.sh \
   --xformers \
   --listen \
+  --enable-insecure-extension-access \
   --port 7680

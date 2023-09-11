@@ -43,7 +43,8 @@ USER stable_diffusion
 RUN git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git ./webui && \
     mv ./webui/models ./webui/models-default && \
     mv ./webui/configs ./webui/configs-default && \
-    mv ./webui/embeddings ./webui/embeddings-default
+    mv ./webui/embeddings ./webui/embeddings-default && \
+    mv ./webui/extensions ./webui/extensions-default
 
 WORKDIR /home/stable_diffusion/webui
 EXPOSE 7680/tcp
