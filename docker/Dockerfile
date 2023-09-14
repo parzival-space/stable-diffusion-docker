@@ -6,26 +6,33 @@ LABEL org.opencontainers.image.licenses=AGPL-3.0-only
 
 # install dependencies
 RUN apt update && \
-    DEBIAN_FRONTEND=noninteractive apt install --no-install-recommends --no-install-suggests -y \
+    DEBIAN_FRONTEND=noninteractive apt install --no-install-recommends --no-install-suggests -y software-properties-common && \
+    add-apt-repository -y ppa:deadsnakes/ppa
+RUN apt update && \
+    apt install --no-install-recommends --no-install-suggests -y \
         git \
         g++ \
         google-perftools \
-        python3 \
-        python3-pip \
-        python3-venv \
-        python3-dev \
         ffmpeg \
         libsm6 \
         libxext6 \
         sudo \
-        curl
+        curl \
+        python3.10 \
+        python3.10-distutils \
+        python3.10-venv \
+        python3.10-dev
 
 # setup python
-RUN pip install --upgrade pip
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1 && \
+    update-alternatives --set python3 /usr/bin/python3.10 && \
+    python3.10 -m ensurepip && \
+    python3.10 -m pip install --upgrade pip
 ENV PYTHONUNBUFFERED=1 \
     PATH="$PATH:/home/stable_diffusion/.local/bin" \
     TORCH_CUDA_ARCH_LIST=All \
-    FORCE_CUDA=1
+    FORCE_CUDA=1 \
+    PYTHON_CMD=/usr/bin/python3
 
 # create stable diffusion user
 RUN useradd -mp $(openssl passwd -1 SuperSecurePassword) -G sudo stable_diffusion && \
@@ -40,7 +47,7 @@ RUN mkdir -p /data && \
 # setup stable diffusion web
 WORKDIR /home/stable_diffusion
 USER stable_diffusion
-RUN git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git ./webui && \
+RUN git clone --single-branch --branch "v1.6.0" https://github.com/AUTOMATIC1111/stable-diffusion-webui.git ./webui && \
     mv ./webui/models ./webui/models-default && \
     mv ./webui/configs ./webui/configs-default && \
     mv ./webui/embeddings ./webui/embeddings-default && \
