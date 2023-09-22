@@ -1,15 +1,19 @@
 version: '3.3'
 services:
   stable-diffusion:
+# uncomment to build from source
 #    build:
-#      context: ./docker
+#      context: ./stable-diffusion-web
 #      dockerfile: Dockerfile
     image: ghcr.io/parzival-space/stable-diffusion:latest
+    environment:
+      - LAUNCH_ARGS=--xformers --update-check --enable-insecure-extension-access
     volumes:
-      - ./data/configs:/data/configs
-      - ./data/embeddings:/data/embeddings
-      - ./data/models:/data/models
-      - ./data/outputs:/data/outputs
+      - ./data/stable-diffusion-web/configs:/data/configs
+      - ./data/stable-diffusion-web/embeddings:/data/embeddings
+      - ./data/stable-diffusion-web/extensions:/data/extensions
+      - ./data/stable-diffusion-web/models:/data/models
+      - ./data/stable-diffusion-web/outputs:/data/outputs
       - sd_repositories:/data/repositories # diffuser repositories
       - sd_venv:/data/venv # python venv
     ports:

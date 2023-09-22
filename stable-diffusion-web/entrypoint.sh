@@ -41,8 +41,5 @@ do
 done
 
 # start webui
-$webuiDir/webui.sh \
-  --xformers \
-  --listen \
-  --enable-insecure-extension-access \
-  --port 7680
+LAUNCH_ARGS="${LAUNCH_ARGS:-"--xformers --update-check --enable-insecure-extension-access"}"
+$webuiDir/webui.sh $LAUNCH_ARGS --listen --port 7680
