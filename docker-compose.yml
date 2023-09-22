@@ -1,17 +1,21 @@
 version: '3.3'
 services:
-  stable-diffusion:
+  stable-diffusion-web:
+# uncomment to build from source
 #    build:
-#      context: ./docker
+#      context: ./stable-diffusion-web
 #      dockerfile: Dockerfile
-    image: ghcr.io/parzival-space/stable-diffusion:latest
+    image: ghcr.io/parzival-space/stable-diffusion:stable-diffusion-web
+    environment:
+      - LAUNCH_ARGS=--xformers --update-check --enable-insecure-extension-access
     volumes:
-      - ./data/configs:/data/configs
-      - ./data/embeddings:/data/embeddings
-      - ./data/models:/data/models
-      - ./data/outputs:/data/outputs
-      - sd_repositories:/data/repositories # diffuser repositories
-      - sd_venv:/data/venv # python venv
+      - ./data/stable-diffusion-web/configs:/data/configs
+      - ./data/stable-diffusion-web/embeddings:/data/embeddings
+      - ./data/stable-diffusion-web/extensions:/data/extensions
+      - ./data/stable-diffusion-web/models:/data/models
+      - ./data/stable-diffusion-web/outputs:/data/outputs
+      - diffusers:/data/repositories # diffuser repositories
+      - venv:/data/venv # python venv
     ports:
       - "0.0.0.0:7680:7680"
     deploy:
@@ -21,6 +25,30 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [ gpu ]
+  comfy-ui:
+    #     uncomment to build from source
+    #    build:
+    #      context: ./comfy-ui
+    #      dockerfile: Dockerfile
+    image: ghcr.io/parzival-space/stable-diffusion:comfy-ui
+    environment:
+      - LAUNCH_ARGS=--preview-method auto
+    volumes:
+      - ./data/comfy-ui/custom_nodes:/data/custom_nodes
+      - ./data/comfy-ui/models:/data/models
+      - ./data/comfy-ui/outputs:/data/outputs
+      - venv:/data/venv # python venv
+      - comfy:/data/comfy-ui # comfy-ui git repository
+    ports:
+      - "0.0.0.0:8188:8188"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
 volumes:
-  sd_venv:
-  sd_repositories:
+  venv:
+  diffusers:
+  comfy:
