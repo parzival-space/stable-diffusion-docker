@@ -2,9 +2,9 @@ version: '3.3'
 services:
   stable-diffusion-web:
 # uncomment to build from source
-    build:
-      context: ./stable-diffusion-web
-      dockerfile: Dockerfile
+#    build:
+#      context: ./stable-diffusion-web
+#      dockerfile: Dockerfile
     image: ghcr.io/parzival-space/stable-diffusion:stable-diffusion-web
     environment:
       - LAUNCH_ARGS=--xformers --update-check --enable-insecure-extension-access

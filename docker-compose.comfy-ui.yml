@@ -1,10 +1,10 @@
 version: '3.3'
 services:
   comfy-ui:
-    #     uncomment to build from source
-    build:
-      context: ./comfy-ui
-      dockerfile: Dockerfile
+#     uncomment to build from source
+#    build:
+#      context: ./comfy-ui
+#      dockerfile: Dockerfile
     image: ghcr.io/parzival-space/stable-diffusion:comfy-ui
     environment:
       - LAUNCH_ARGS=--preview-method auto
