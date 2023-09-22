@@ -1,11 +1,11 @@
 version: '3.3'
 services:
-  stable-diffusion:
+  stable-diffusion-web:
 # uncomment to build from source
-#    build:
-#      context: ./stable-diffusion-web
-#      dockerfile: Dockerfile
-    image: ghcr.io/parzival-space/stable-diffusion:latest
+    build:
+      context: ./stable-diffusion-web
+      dockerfile: Dockerfile
+    image: ghcr.io/parzival-space/stable-diffusion:stable-diffusion-web
     environment:
       - LAUNCH_ARGS=--xformers --update-check --enable-insecure-extension-access
     volumes:
@@ -14,8 +14,8 @@ services:
       - ./data/stable-diffusion-web/extensions:/data/extensions
       - ./data/stable-diffusion-web/models:/data/models
       - ./data/stable-diffusion-web/outputs:/data/outputs
-      - sd_repositories:/data/repositories # diffuser repositories
-      - sd_venv:/data/venv # python venv
+      - diffusers:/data/repositories # diffuser repositories
+      - venv:/data/venv # python venv
     ports:
       - "0.0.0.0:7680:7680"
     deploy:
@@ -26,5 +26,5 @@ services:
               count: 1
               capabilities: [ gpu ]
 volumes:
-  sd_venv:
-  sd_repositories:
+  venv:
+  diffusers:

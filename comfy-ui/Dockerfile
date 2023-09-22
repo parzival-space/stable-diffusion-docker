@@ -44,15 +44,9 @@ RUN mkdir -p /data && \
     chown stable_diffusion:stable_diffusion -R /data && \
     chown stable_diffusion:stable_diffusion -R /home/stable_diffusion
 
-# setup stable diffusion web
+# setup stable diffusion user
 WORKDIR /home/stable_diffusion
 USER stable_diffusion
-RUN git clone --single-branch --branch "v1.6.0" https://github.com/AUTOMATIC1111/stable-diffusion-webui.git ./webui && \
-    mv ./webui/models ./webui/models-default && \
-    mv ./webui/configs ./webui/configs-default && \
-    mv ./webui/embeddings ./webui/embeddings-default && \
-    mv ./webui/extensions ./webui/extensions-default
 
-WORKDIR /home/stable_diffusion/webui
-EXPOSE 8188/tcp
+EXPOSE 7680/tcp
 CMD ["/bin/bash", "/home/stable_diffusion/entrypoint.sh"]
