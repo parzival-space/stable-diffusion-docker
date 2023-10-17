@@ -4,7 +4,7 @@ set -e
 dataDir=/data
 comfyDir=$dataDir/comfy-ui
 comfyRepo="https://github.com/comfyanonymous/ComfyUI"
-subDirs=("custom_nodes" "models" "outputs" "venv")
+subDirs=("custom_nodes" "models" "output" "venv")
 
 # fix permissions (because docker mounts suck)
 sudo chown "$(whoami):$(whoami)" -R $dataDir

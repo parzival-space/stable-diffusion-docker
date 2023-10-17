@@ -27,16 +27,16 @@ services:
               capabilities: [ gpu ]
   comfy-ui:
     #     uncomment to build from source
-    #    build:
-    #      context: ./comfy-ui
-    #      dockerfile: Dockerfile
+    build:
+      context: ./comfy-ui
+      dockerfile: Dockerfile
     image: ghcr.io/parzival-space/stable-diffusion:comfy-ui
     environment:
       - LAUNCH_ARGS=--preview-method auto
     volumes:
       - ./data/comfy-ui/custom_nodes:/data/custom_nodes
       - ./data/comfy-ui/models:/data/models
-      - ./data/comfy-ui/outputs:/data/outputs
+      - ./data/comfy-ui/outputs:/data/output
       - venv:/data/venv # python venv
       - comfy:/data/comfy-ui # comfy-ui git repository
     ports:
