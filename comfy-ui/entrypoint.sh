@@ -64,7 +64,7 @@ if [ ! -e "$comfyDir/.comfy-setup-done" ]; then
   echo "Installing comfyUI..."
 
   echo " - Activate VENV and install requirements..."
-  pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu118 xformers
+  pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
   pip install -r "$comfyDir/requirements.txt"
 
   echo " - Done."
