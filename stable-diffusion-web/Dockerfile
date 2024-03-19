@@ -21,7 +21,9 @@ RUN apt update && \
         python3.10 \
         python3.10-distutils \
         python3.10-venv \
-        python3.10-dev
+        python3.10-dev \
+        libgl1 \
+        libglib2.0-0
 
 # setup python
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1 && \
@@ -47,7 +49,7 @@ RUN mkdir -p /data && \
 # setup stable diffusion web
 WORKDIR /home/stable_diffusion
 USER stable_diffusion
-RUN git clone --single-branch --branch "v1.6.0" https://github.com/AUTOMATIC1111/stable-diffusion-webui.git ./webui && \
+RUN git clone --single-branch --branch "v1.8.0" https://github.com/AUTOMATIC1111/stable-diffusion-webui.git ./webui && \
     mv ./webui/models ./webui/models-default && \
     mv ./webui/configs ./webui/configs-default && \
     mv ./webui/embeddings ./webui/embeddings-default && \
