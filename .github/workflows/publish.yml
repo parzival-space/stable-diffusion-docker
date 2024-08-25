@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - development
-    workflow_dispatch:
+  workflow_dispatch:
     # manual dispatch allowed
 
 jobs:
