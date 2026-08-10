@@ -27,20 +27,18 @@ services:
               capabilities: [ gpu ]
   comfy-ui:
 # uncomment to build from source
-#    build:
-#      context: ./comfy-ui
-#      dockerfile: Dockerfile
-    image: ghcr.io/parzival-space/stable-diffusion:comfy-ui
-    environment:
-      - LAUNCH_ARGS=--preview-method auto
+    build:
+      context: ./comfy-ui
+      dockerfile: Dockerfile
+#    image: ghcr.io/parzival-space/stable-diffusion:comfy-ui
     volumes:
-      - ./data/comfy-ui/custom_nodes:/data/custom_nodes
-      - ./data/comfy-ui/models:/data/models
-      - ./data/comfy-ui/outputs:/data/output
-      - venv:/data/venv # python venv
-      - comfy:/data/comfy-ui # comfy-ui git repository
+      - .local/comfy-ui:/comfy-ui
     ports:
-      - "0.0.0.0:8188:8188"
+      - "8188:8188/tcp"
+    tty: true
+    stdin_open: true
+    user: "1000:1000"
+    userns_mode: keep-id
     deploy:
       resources:
         reservations:
@@ -51,4 +49,3 @@ services:
 volumes:
   venv:
   diffusers:
-  comfy:
